@@ -1,7 +1,7 @@
 var fs = require('fs');
 var Twitter = require('twitter');
-var spotify = require('spotify');
-var omdb = require('omdb');
+var spotify = require('node-spotify-api');
+var OMDB = require('./keys');
 var request = require('request');
 var input1 = process.argv[2];
 var input2 = process.argv.splice(3).join(" ");
@@ -32,6 +32,7 @@ var params = {
     screen_name: '@mntypython74',
     count: 20
 };
+
 
 run();
 

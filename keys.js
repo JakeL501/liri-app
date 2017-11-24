@@ -8,13 +8,13 @@ var twitterKeys = {
   access_token_secret: 'xd44uRFOuDoJoloPa1uJKnpoI1ZMPQYVIrG3pybH6SS2L'
 }
 // Spotify
-var spotifyKeys = {
-  client_ID: '1643458b064a4012b0e6e486818e1465',
-  client_secret: '0bc0624449094d2b9664ca16eacde3f3'
-}
+// var spotifyKeys = {
+//   client_ID: '1643458b064a4012b0e6e486818e1465',
+//   client_secret: '0bc0624449094d2b9664ca16eacde3f3'
+// }
 // OMDB
 var omdbKey = 'b01d63b6';
 
 module.exports.twitterKeys = twitterKeys;
-module.exports.spotifyKeys = spotifyKeys;
+// module.exports.spotifyKeys = spotifyKeys;
 module.exports.omdbKey = omdbKey;
