@@ -1,7 +1,7 @@
 var fs = require('fs');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
-var OMDB = require('./keys');
+var omdb = require('omdb');
 var request = require('request');
 var input1 = process.argv[2];
 var input2 = process.argv.splice(3).join(" ");
@@ -10,13 +10,9 @@ function log() {
 
     fs.appendFile('./log.txt', input1 + " " + input2 + ", ", function (err) {
 
-        // If an error was experienced we say it.
         if (err) {
             console.log(err);
-        }
-
-        // If no error is experienced, we'll log the phrase "Content Added" to our node console.
-        else {
+        } else {
             console.log("Content Added!");
         }
 
@@ -24,7 +20,6 @@ function log() {
 };
 
 var keys = require('./keys.js');
-// console.log(keys.twitterKeys);
 
 var client = new Twitter(keys.twitterKeys);
 
@@ -92,63 +87,48 @@ function run() {
         });
 
         log();
+    } else if (input1 === "movie-this") {
 
-        if (input1 === "movie-this") {
+        if (input2 === undefined) {
 
-            if (input2.length < 1) {
-
-                input2 = "Mr. Nobody";
-            };
-
-            // Then run a request to the OMDB API with the movie specified
-            request("http://www.omdbapi.com/?t=" + input2 + "&y=&plot=short&r=json&tomatoes=true", function (error, response, body) {
-
-                // If the request is successful (i.e. if the response status code is 200)
-                if (!error && response.statusCode === 200) {
-
-                    // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-                    // console.log(JSON.parse(body));
-                    console.log('');
-                    console.log('OMDB Movie Information: ');
-                    console.log('--------------------------');
-                    console.log("Movie Title: " + JSON.parse(body).Title);
-                    console.log("Year of Release: " + JSON.parse(body).Year);
-                    console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
-                    console.log("Countries produced in: " + JSON.parse(body).Country);
-                    console.log("Language: " + JSON.parse(body).Language);
-                    console.log("Movie Plot: " + JSON.parse(body).Plot);
-                    console.log("Actor(s): " + JSON.parse(body).Actors);
-                    console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
-                    console.log("Rotten Tomatoes URL: " + JSON.parse(body).tomatoURL);
-                    console.log('--------------------------');
-                } else {
-
-                    console.log(error);
-
-                }
-
-            });
-
-            log();
-
-
-        } else if (input1 === "do-what-it-says") {
-
-            log();
-
-            fs.readFile('random.txt', 'utf8', function (err, data) {
-                if (err) throw err;
-                // console.log(data);
-
-                var arr = data.split(',');
-
-                input1 = arr[0].trim();
-                input2 = arr[1].trim();
-                run();
-
-            });
-
-
+            input2 = "Mr. Nobody";
         };
+
+        request("www.omdbapi.com/?=b01d63b6" + input2 + "&y=&plot=full&tomatoes=true&r=json", function (err, response, body) {
+            if (!err && response.statusCode == 200) {
+                var data = [];
+                var jsonData = JSON.parse(body);
+
+                data.push({
+                    'Title: ': jsonData.Title,
+                    'Year: ': jsonData.Year,
+                    'Rated: ': jsonData.Rated,
+                    'IMDB Rating: ': jsonData.imdbRating,
+                    'Country: ': jsonData.Country,
+                    'Language: ': jsonData.Language,
+                    'Plot: ': jsonData.Plot,
+                    'Actors: ': jsonData.Actors,
+                    'Rotten Tomatoes Rating: ': jsonData.tomatoRating,
+                    'Rotton Tomatoes URL: ': jsonData.tomatoURL,
+                });
+                console.log(data);
+
+            }
+        })
+        log();
+    } else if (input1 === "do-what-it-says") {
+
+        fs.readFile('random.txt', 'utf8', function (err, data) {
+            if (err) throw err;
+
+            var arr = data.split(',');
+
+            input1 = arr[0].trim();
+            input2 = arr[1].trim();
+            run();
+
+        });
+        log();
     };
-};
+
+}
