@@ -1,7 +1,6 @@
 var fs = require('fs');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
-var omdb = require('omdb');
 var request = require('request');
 var input1 = process.argv[2];
 var input2 = process.argv.splice(3).join(" ");
@@ -13,7 +12,7 @@ function log() {
         if (err) {
             console.log(err);
         } else {
-            console.log("Content Added!");
+            // console.log("Content Added!");
         }
 
     });
@@ -89,30 +88,30 @@ function run() {
         log();
     } else if (input1 === "movie-this") {
 
-        if (input2 === undefined) {
+        if (input2.length < 1) {
 
             input2 = "Mr. Nobody";
+             
+            
         };
 
-        request("www.omdbapi.com/?=b01d63b6" + input2 + "&y=&plot=full&tomatoes=true&r=json", function (err, response, body) {
+        request("http://www.omdbapi.com/?t="+input2+"&apikey=963bcb75", function (err, response, body) {
             if (!err && response.statusCode == 200) {
-                var data = [];
-                var jsonData = JSON.parse(body);
-
-                data.push({
-                    'Title: ': jsonData.Title,
-                    'Year: ': jsonData.Year,
-                    'Rated: ': jsonData.Rated,
-                    'IMDB Rating: ': jsonData.imdbRating,
-                    'Country: ': jsonData.Country,
-                    'Language: ': jsonData.Language,
-                    'Plot: ': jsonData.Plot,
-                    'Actors: ': jsonData.Actors,
-                    'Rotten Tomatoes Rating: ': jsonData.tomatoRating,
-                    'Rotton Tomatoes URL: ': jsonData.tomatoURL,
-                });
-                console.log(data);
-
+                var json = JSON.parse(body);
+               
+                console.log('Movie Information Results: ');
+                console.log('--------------------------');
+                console.log('Title: ' + json.Title);
+                console.log('Year: ' + json.Year);
+                console.log('Rated: ' + json.Rated);
+                console.log('Country: ' + json.Country);
+                console.log('Language: ' + json.Language);
+                console.log('Director: ' + json.Director);
+                console.log('Actors: ' + json.Actors);
+                console.log('Plot: ' + json.Plot);
+                console.log('imdbRating: ' + json.imdbRating);
+                console.log('Rotten Tomatoes Rating: ' + json.tomatoRating);
+                console.log('--------------------------');
             }
         })
         log();

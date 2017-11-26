@@ -8,6 +8,4 @@ var twitterKeys = {
   access_token_secret: 'xd44uRFOuDoJoloPa1uJKnpoI1ZMPQYVIrG3pybH6SS2L'
 }
 
-var omdbKey = 'b01d63b6';
-
 module.exports.twitterKeys = twitterKeys;
